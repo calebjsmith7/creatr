@@ -12,11 +12,12 @@ import {
 
 export default function Login({ logo }) {
   const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState("");
   const { signIn } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await signIn();
+    await signIn(email);
   };
 
   const handleToggle = () => setIsRegister((prev) => !prev);
@@ -39,9 +40,13 @@ export default function Login({ logo }) {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {isRegister && <TextField label="Name" fullWidth />}
-          <TextField label="Email" type="email" fullWidth />
-          <TextField label="Password" type="password" fullWidth />
-          {isRegister && <TextField label="Confirm Password" type="password" fullWidth />}
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <Button variant="contained" color="primary" type="submit">
             {isRegister ? 'Register' : 'Login'}
           </Button>

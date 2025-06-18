@@ -1,6 +1,15 @@
 "use client";
 import "@/lib/firebase";
-import { createContext, useState, useContext } from "react";
+import { auth, db } from "@/lib/firebase";
+import {
+  sendSignInLinkToEmail,
+  signInWithEmailLink,
+  isSignInWithEmailLink,
+  onAuthStateChanged,
+  signOut as fbSignOut,
+} from "firebase/auth";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { createContext, useState, useContext, useEffect } from "react";
 import Login from "@/app/components/Login";
 
 const AuthContext = createContext({
@@ -12,18 +21,58 @@ const AuthContext = createContext({
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  // Temporary sign in function. Integrate Firebase Auth later.
-  const signIn = async (credentials) => {
-    // In the initial version simply mark the user as logged in.
-    setUser(true);
-    console.warn("signIn is not implemented", credentials);
+  const signIn = async (email) => {
+    if (typeof window === "undefined") return;
+
+    try {
+      if (isSignInWithEmailLink(auth, window.location.href)) {
+        const storedEmail = window.localStorage.getItem("emailForSignIn") || email;
+        const result = await signInWithEmailLink(
+          auth,
+          storedEmail,
+          window.location.href
+        );
+        window.localStorage.removeItem("emailForSignIn");
+        setUser(result.user);
+      } else if (email) {
+        await sendSignInLinkToEmail(auth, email, {
+          url: window.location.href,
+          handleCodeInApp: true,
+        });
+        window.localStorage.setItem("emailForSignIn", email);
+      }
+    } catch (err) {
+      console.error("Error signing in", err);
+    }
   };
 
-  // Temporary sign out function. Integrate Firebase Auth later.
   const signOut = async () => {
-    setUser(null);
-    console.warn("signOut is not implemented");
+    try {
+      await fbSignOut(auth);
+      setUser(null);
+    } catch (err) {
+      console.error("Error signing out", err);
+    }
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setUser(firebaseUser);
+
+      if (firebaseUser) {
+        const userRef = doc(db, "users", firebaseUser.uid);
+        const snap = await getDoc(userRef);
+        if (!snap.exists()) {
+          await setDoc(userRef, {
+            email: firebaseUser.email,
+            createdAt: serverTimestamp(),
+          });
+        }
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, signIn, signOut }}>
