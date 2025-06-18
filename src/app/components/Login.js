@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import {
   Box,
   Button,
@@ -11,6 +12,12 @@ import {
 
 export default function Login({ logo }) {
   const [isRegister, setIsRegister] = useState(false);
+  const { signIn } = useAuth();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await signIn();
+  };
 
   const handleToggle = () => setIsRegister((prev) => !prev);
 
@@ -30,12 +37,12 @@ export default function Login({ logo }) {
         <Typography variant="h5" component="h1" sx={{ mb: 2 }}>
           {isRegister ? 'Register' : 'Login'}
         </Typography>
-        <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {isRegister && <TextField label="Name" fullWidth />}
           <TextField label="Email" type="email" fullWidth />
           <TextField label="Password" type="password" fullWidth />
           {isRegister && <TextField label="Confirm Password" type="password" fullWidth />}
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" type="submit">
             {isRegister ? 'Register' : 'Login'}
           </Button>
         </Box>
