@@ -8,6 +8,7 @@ import {
   Switch,
   TextField,
   Typography,
+  Alert,
 } from "@mui/material";
 
 export default function Login({ logo }) {
@@ -32,7 +33,6 @@ export default function Login({ logo }) {
         );
         setEmail("");
       }
-      // if result.status === "signedIn", the context will swap to the protected UI
     } catch (err) {
       console.error(err);
       setError("❌ Something went wrong. Please try again.");
@@ -50,34 +50,72 @@ export default function Login({ logo }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        bgcolor: "#f5f5f5",
+        bgcolor: "#1d1d1e",
+        background: "url(/peoplebg.jpg)",
+        backgroundSize: "cover",
         p: 2,
       }}
     >
-      <Paper elevation={3} sx={{ p: 4, width: 360 }}>
+      <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
+        <img
+          src="/creatr-logo-wht.png"
+          alt="Logo"
+          style={{ maxWidth: "930px", height: 40 }}
+        />
+      </Box>
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          width: 360,
+          bgcolor: "#2c2c2e",
+          color: "white",
+          borderRadius: 5,
+        }}
+      >
         <Box sx={{ textAlign: "center", mb: 2 }}>{logo}</Box>
-        <Typography variant="h5" component="h1" sx={{ mb: 2 }}>
+        <Typography variant="h5" component="h1" sx={{ mb: 2, color: "white" }}>
           {isRegister ? "Register" : "Login"}
         </Typography>
-        {message && <Alert severity="success">{message}</Alert>}
-        {error && <Alert severity="error">{error}</Alert>}
+
+        {message && (
+          <Alert severity="success" sx={{ bgcolor: "#333", color: "white" }}>
+            {message}
+          </Alert>
+        )}
+        {error && (
+          <Alert severity="error" sx={{ bgcolor: "#333", color: "white" }}>
+            {error}
+          </Alert>
+        )}
+
         <Box
           component="form"
           onSubmit={handleSubmit}
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
         >
           <TextField
             label="Email"
             type="email"
             fullWidth
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            variant="filled"
+            InputLabelProps={{ style: { color: "#bbb" } }}
+            InputProps={{
+              style: { color: "white", backgroundColor: "#3a3a3c" },
+            }}
           />
+
           <Button
             variant="contained"
-            color="primary"
             type="submit"
-            disabled={isSubmitting || !email}
+            sx={{
+              backgroundColor: "#e33962",
+              color: "white",
+              "&:hover": { backgroundColor: "#c02b53" },
+            }}
           >
             {isSubmitting
               ? "Sending Email Link..."
@@ -86,14 +124,26 @@ export default function Login({ logo }) {
               : "Login"}
           </Button>
         </Box>
+
         <FormControlLabel
-          control={<Switch checked={isRegister} onChange={handleToggle} />}
+          control={
+            <Switch
+              checked={isRegister}
+              onChange={handleToggle}
+              sx={{
+                "& .MuiSwitch-switchBase.Mui-checked": { color: "#e33962" },
+                "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                  backgroundColor: "#e33962",
+                },
+              }}
+            />
+          }
           label={
             isRegister
               ? "Have an account? Login"
               : "Don't have an account? Register"
           }
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, color: "white" }}
         />
       </Paper>
     </Box>
