@@ -1,4 +1,5 @@
 "use client";
+import "@/lib/firebase";
 import { createContext, useState, useContext } from "react";
 import Login from "@/app/components/Login";
 
