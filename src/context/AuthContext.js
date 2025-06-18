@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useState, useContext } from "react";
+import Login from "@/app/components/Login";
 
 const AuthContext = createContext({
   user: null,
@@ -24,7 +25,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{ user, signIn, signOut }}>
-      {children}
+      {!user ? <Login /> : children}
     </AuthContext.Provider>
   );
 }
