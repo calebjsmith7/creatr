@@ -1,10 +1,16 @@
-// Firebase client initialization
+// src/lib/firebase.js
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+
+let app;
+let auth;
+let db;
+
 if (typeof window !== "undefined") {
+  // 1) Firebase config from NEXT_PUBLIC_ env vars
   const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -15,33 +21,28 @@ if (typeof window !== "undefined") {
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
   };
 
-  // Initialize Firebase app (only once)
-  const app =
-    getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+  // 2) Initialize app once
+  app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 
-  if (typeof window !== "undefined") {
-    getAnalytics(app);
+  // 3) Analytics (browser only)
+  getAnalytics(app);
+
+  // 4) App Check (with debug on localhost)
+  const hostname = window.location.hostname;
+  const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
+  if (isLocalhost) {
+    self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
   }
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(
+      process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY
+    ),
+    isTokenAutoRefreshEnabled: true,
+  });
 
-  // Check if running locally (localhost or 127.0.0.1)
-  const isLocalhost =
-    typeof window !== "undefined" &&
-    ["localhost", "127.0.0.1"].includes(window.location.hostname);
-
-  if (typeof window !== "undefined") {
-    if (isLocalhost) {
-      // Enable debug mode on localhost only
-      self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-    }
-
-    initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider(
-        "6Lc6pGUrAAAAAEhDz4yv5oQBrZF03EFgr0HRdaT8"
-      ),
-      isTokenAutoRefreshEnabled: true,
-    });
-  }
+  // 5) Auth & Firestore
+  auth = getAuth(app);
+  db = getFirestore(app);
 }
-const auth = getAuth(app);
-const db = getFirestore(app);
-export { app, db, auth };
+
+export { app, auth, db };
