@@ -1,5 +1,5 @@
 "use client";
-import "@/lib/firebase";
+import "@/lib/firebase"; // makes sure firebase + App Check have run
 import { auth, db } from "@/lib/firebase";
 import {
   sendSignInLinkToEmail,
@@ -9,7 +9,13 @@ import {
   signOut as fbSignOut,
 } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { createContext, useState, useContext, useEffect } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from "react";
 import Login from "@/app/components/Login";
 
 const AuthContext = createContext({
@@ -21,44 +27,48 @@ const AuthContext = createContext({
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  const signIn = async (email) => {
+  // core signIn: either send link (returns {status:"linkSent"}) or complete sign-in
+  const signIn = useCallback(async (email) => {
     if (typeof window === "undefined") return;
 
-    try {
-      if (isSignInWithEmailLink(auth, window.location.href)) {
-        const storedEmail = window.localStorage.getItem("emailForSignIn") || email;
-        const result = await signInWithEmailLink(
-          auth,
-          storedEmail,
-          window.location.href
-        );
-        window.localStorage.removeItem("emailForSignIn");
-        setUser(result.user);
-      } else if (email) {
-        await sendSignInLinkToEmail(auth, email, {
-          url: window.location.href,
-          handleCodeInApp: true,
-        });
-        window.localStorage.setItem("emailForSignIn", email);
-      }
-    } catch (err) {
-      console.error("Error signing in", err);
+    // if link present, complete sign in
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      const storedEmail =
+        window.localStorage.getItem("emailForSignIn") || email;
+      const result = await signInWithEmailLink(
+        auth,
+        storedEmail,
+        window.location.href
+      );
+      window.localStorage.removeItem("emailForSignIn");
+      setUser(result.user);
+      return { status: "signedIn" };
     }
-  };
 
-  const signOut = async () => {
-    try {
-      await fbSignOut(auth);
-      setUser(null);
-    } catch (err) {
-      console.error("Error signing out", err);
+    // otherwise send a link to the address
+    if (email) {
+      await sendSignInLinkToEmail(auth, email, {
+        url: window.location.origin + "/", // redirect back home
+        handleCodeInApp: true,
+      });
+      // keep for completion step
+      window.localStorage.setItem("emailForSignIn", email);
+      return { status: "linkSent" };
     }
-  };
 
+    throw new Error("No email provided");
+  }, []);
+
+  // simple signOut wrapper
+  const signOut = useCallback(async () => {
+    await fbSignOut(auth);
+    setUser(null);
+  }, []);
+
+  // listen to the Firebase Auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
-
       if (firebaseUser) {
         const userRef = doc(db, "users", firebaseUser.uid);
         const snap = await getDoc(userRef);
@@ -70,9 +80,20 @@ export function AuthProvider({ children }) {
         }
       }
     });
-
     return unsubscribe;
   }, []);
+
+  // auto-complete sign in if the link brought you back here
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      isSignInWithEmailLink(auth, window.location.href)
+    ) {
+      // grabs email from storage; if none, Login UI will ask again
+      const emailForSignIn = window.localStorage.getItem("emailForSignIn");
+      if (emailForSignIn) signIn(emailForSignIn).catch(console.error);
+    }
+  }, [signIn]);
 
   return (
     <AuthContext.Provider value={{ user, signIn, signOut }}>
