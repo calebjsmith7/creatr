@@ -11,16 +11,17 @@ const AuthContext = createContext({
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  // Placeholder sign in function. Integrate Firebase Auth later.
+  // Temporary sign in function. Integrate Firebase Auth later.
   const signIn = async (credentials) => {
+    // In the initial version simply mark the user as logged in.
+    setUser(true);
     console.warn("signIn is not implemented", credentials);
-    // setUser(userData); // set user data when implemented
   };
 
-  // Placeholder sign out function. Integrate Firebase Auth later.
+  // Temporary sign out function. Integrate Firebase Auth later.
   const signOut = async () => {
+    setUser(null);
     console.warn("signOut is not implemented");
-    // setUser(null);
   };
 
   return (
