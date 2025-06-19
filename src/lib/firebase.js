@@ -7,13 +7,13 @@ import { getAnalytics } from "firebase/analytics";
 
 // 1) Firebase config from NEXT_PUBLIC_ env vars
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyDb8_EKnwqM0CMTNQwoEcMI-xENixr8I50",
+  authDomain: "creatr-789d2.firebaseapp.com",
+  projectId: "creatr-789d2",
+  storageBucket: "creatr-789d2.firebasestorage.app",
+  messagingSenderId: "906904218006",
+  appId: "1:906904218006:web:468e050c7ecc9c4d2c95b7",
+  measurementId: "G-HNQY6PSJBV",
 };
 
 // 2) Init the app once (safe on both server & client)

@@ -13,7 +13,7 @@ const SlickSlider = dynamic(() => import("react-slick"), {
 
 export const slides = [
   {
-    href: "https://creatr.com/courses/the-aligned-leader",
+    href: "#",
     desktop:
       "https://creatr.com/wp-content/uploads/WebBanner_Conversations_TheAlignedLeader_KSTABYOU_Desktop_v1.jpg",
     mobile:
@@ -21,7 +21,7 @@ export const slides = [
     ipad: "https://creatr.com/wp-content/uploads/WebBanner_Conversations_TheAlignedLeader_KSTABYOU_iPad_v1.jpg",
   },
   {
-    href: "https://creatr.com/courses/creatr-lab",
+    href: "#",
     desktop:
       "https://creatr.com/wp-content/uploads/2560x990-mmah-lab-desktop-watchnow-v2-1.jpg",
     mobile:
@@ -29,7 +29,7 @@ export const slides = [
     ipad: "https://creatr.com/wp-content/uploads/2110x1140-mmah-lab-ipad-watchnow-v2.jpg",
   },
   {
-    href: "/courses/kingdomculture/",
+    href: "#",
     desktop:
       "https://creatr.com/wp-content/uploads/kb-ameen-2560x990-Desktop-Banner-1.jpg",
     mobile:
@@ -37,7 +37,7 @@ export const slides = [
     ipad: "https://creatr.com/wp-content/uploads/kingdom-culture-banner-ipad.jpg",
   },
   {
-    href: "/courses/to-be-of-service/",
+    href: "#",
     desktop:
       "https://creatr.com/wp-content/uploads/mmah-2560x990-Desktop-Banner-1.jpg",
     mobile:
@@ -45,7 +45,7 @@ export const slides = [
     ipad: "https://creatr.com/wp-content/uploads/mmah-2110x1140-iPad-banner.jpg",
   },
   {
-    href: "https://creatr.com/courses/marriage-and-ministry/",
+    href: "#",
     desktop:
       "https://creatr.com/wp-content/uploads/mm-bjj-2560x990-Desktop-Banner-1.jpg",
     mobile:
@@ -53,7 +53,7 @@ export const slides = [
     ipad: "https://creatr.com/wp-content/uploads/marriage-ministry-banner-ipad.jpg",
   },
   {
-    href: "https://creatr.com/pathway",
+    href: "#",
     desktop:
       "https://creatr.com/wp-content/uploads/creatr-pathway-2560x990-Desktop-Banner-1.jpg",
     mobile:
