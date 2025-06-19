@@ -1,5 +1,4 @@
-// src/app/providers.jsx
-"use client"; // ← this makes everything below a client component
+"use client";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { AuthProvider } from "../context/AuthContext";

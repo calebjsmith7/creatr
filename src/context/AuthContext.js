@@ -28,8 +28,13 @@ export function AuthProvider({ children }) {
 
     // if link present, complete sign in
     if (isSignInWithEmailLink(auth, window.location.href)) {
-      const storedEmail =
-        window.localStorage.getItem("emailForSignIn") || email;
+      let storedEmail = window.localStorage.getItem("emailForSignIn");
+      if (!storedEmail) {
+        storedEmail = window.prompt(
+          "Please enter your email to complete sign-in:"
+        );
+      }
+      if (!storedEmail) throw new Error("Email is required to finish sign-in.");
       const result = await signInWithEmailLink(
         auth,
         storedEmail,
@@ -37,6 +42,7 @@ export function AuthProvider({ children }) {
       );
       window.localStorage.removeItem("emailForSignIn");
       setUser(result.user);
+      window.location.replace("/");
       return { status: "signedIn" };
     }
 
