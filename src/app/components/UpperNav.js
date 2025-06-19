@@ -29,8 +29,8 @@ export default function UpperNav({ children }) {
           background: "#1d1d1e",
           width: "100vw",
           color: "white",
-          mb: 2,
-          mt: 1,
+          mb: 3,
+          mt: 3,
         }}
       >
         <Toolbar>
@@ -65,7 +65,12 @@ export default function UpperNav({ children }) {
               <Typography
                 key={opt.label}
                 variant="button"
-                sx={{ cursor: "pointer", ml: 3 }}
+                sx={{
+                  cursor: "pointer",
+                  ml: 3,
+                  textTransform: "capitalize",
+                  fontSize: 18,
+                }}
               >
                 {opt.label}
               </Typography>

@@ -9,7 +9,13 @@ const Greeting = () => {
   return (
     <Typography
       variant="h3"
-      sx={{ fontWeight: "bold", textAlign: "center", m: 2, color: "white" }}
+      sx={{
+        fontWeight: "bold",
+        textAlign: "center",
+        m: 6,
+        color: "white",
+        fontSize: { xs: "40px", md: "54px" },
+      }}
     >
       Welcome back,{" "}
       {firstName && lastName ? (
