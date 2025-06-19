@@ -1,5 +1,4 @@
 "use client";
-import "@/lib/firebase"; // makes sure firebase + App Check have run
 import { auth, db } from "@/lib/firebase";
 import {
   sendSignInLinkToEmail,
@@ -18,11 +17,7 @@ import {
 } from "react";
 import Login from "@/app/components/Login";
 
-const AuthContext = createContext({
-  user: null,
-  signIn: async () => {},
-  signOut: async () => {},
-});
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
