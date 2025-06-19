@@ -54,9 +54,17 @@ export default function Login({ logo }) {
         background: "url(/peoplebg.jpg)",
         backgroundSize: "cover",
         p: 2,
+        flexDirection: { xs: "column", md: "row" },
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          mr: 4,
+          mb: { xs: 2, md: 0 },
+        }}
+      >
         <img
           src="/creatr-logo-wht.png"
           alt="Logo"
@@ -67,7 +75,7 @@ export default function Login({ logo }) {
         elevation={3}
         sx={{
           p: 4,
-          width: 360,
+          maxWidth: 360,
           bgcolor: "#2c2c2e",
           color: "white",
           borderRadius: 5,

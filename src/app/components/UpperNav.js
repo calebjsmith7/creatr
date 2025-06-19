@@ -30,12 +30,23 @@ export default function UpperNav({ children }) {
           width: "100vw",
           color: "white",
           mb: 2,
+          mt: 1,
         }}
       >
         <Toolbar>
           {/* Logo on the left */}
-          <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-            <img src="/creatr-logo-wht.png" alt="Logo" style={{ height: 40 }} />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              mr: 2,
+            }}
+          >
+            <img
+              src="/creatr-logo-wht.png"
+              alt="Logo"
+              style={{ width: 300, maxWidth: "50vw" }}
+            />
           </Box>
 
           {/* Navigation options - Hidden on Mobile */}
@@ -62,7 +73,11 @@ export default function UpperNav({ children }) {
           </Box>
 
           {/* Profile avatar always visible */}
-          <IconButton onClick={toggleDrawer(true)} edge="end" sx={{ mr: 1 }}>
+          <IconButton
+            onClick={toggleDrawer(true)}
+            edge="end"
+            sx={{ mr: 1, ml: "auto" }}
+          >
             {profilePhoto ? (
               <Avatar src={profilePhoto} alt="Profile" />
             ) : (
