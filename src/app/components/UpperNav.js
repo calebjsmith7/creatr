@@ -24,56 +24,45 @@ export default function UpperNav({ children }) {
     <>
       <AppBar
         position="static"
-        color="default"
-        elevation={1}
+        elevation={0}
         sx={{
-          boxShadow: "none",
-          borderBottom: "none",
           background: "#1d1d1e",
           width: "100vw",
-          left: 0,
-          top: 0,
-          mb: 2,
           color: "white",
+          mb: 2,
         }}
       >
         <Toolbar>
           {/* Logo on the left */}
-          <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
-            <img
-              src="/creatr-logo-wht.png"
-              alt="Logo"
-              style={{ maxWidth: "930px", height: 40 }}
-            />
+          <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+            <img src="/creatr-logo-wht.png" alt="Logo" style={{ height: 40 }} />
           </Box>
 
-          {/* Navigation options */}
-          <Box sx={{ display: "flex", flexGrow: 1 }}>
-            <Typography
-              key={"Library"}
-              variant="button"
-              sx={{ cursor: "pointer", ml: 3 }}
-            >
-              Library
-            </Typography>
-            <Typography
-              key={"Resources"}
-              variant="button"
-              sx={{ cursor: "pointer", ml: 3 }}
-            >
-              Resources
-            </Typography>
-            <Typography
-              key={"Categories"}
-              variant="button"
-              sx={{ cursor: "pointer", ml: 3 }}
-            >
-              Categories
-            </Typography>
+          {/* Navigation options - Hidden on Mobile */}
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", sm: "flex" },
+              alignItems: "center",
+            }}
+          >
+            {[
+              { label: "Library" },
+              { label: "Resources" },
+              { label: "Categories" },
+            ].map((opt) => (
+              <Typography
+                key={opt.label}
+                variant="button"
+                sx={{ cursor: "pointer", ml: 3 }}
+              >
+                {opt.label}
+              </Typography>
+            ))}
           </Box>
 
-          {/* Profile avatar on right */}
-          <IconButton onClick={toggleDrawer(true)} edge="end" sx={{ mr: 2 }}>
+          {/* Profile avatar always visible */}
+          <IconButton onClick={toggleDrawer(true)} edge="end" sx={{ mr: 1 }}>
             {profilePhoto ? (
               <Avatar src={profilePhoto} alt="Profile" />
             ) : (
@@ -84,7 +73,9 @@ export default function UpperNav({ children }) {
           </IconButton>
         </Toolbar>
       </AppBar>
+
       {children}
+
       {/* Right Drawer */}
       <Drawer
         anchor="right"
