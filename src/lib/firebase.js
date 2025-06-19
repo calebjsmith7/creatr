@@ -35,7 +35,7 @@ if (typeof window !== "undefined") {
   }
   initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(
-      process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY
+      "6Lc6pGUrAAAAAEhDz4yv5oQBrZF03EFgr0HRdaT8"
     ),
     isTokenAutoRefreshEnabled: true,
   });
